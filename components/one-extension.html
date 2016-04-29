@@ -1,0 +1,172 @@
+
+<dom-module id="one-extension">
+    <style>
+        :host{
+            display: block;
+        }
+        h1,h2,h3{
+            font-weight: 400;
+            margin:0;
+            padding:0;
+        }
+        i{
+            display: inline-block;
+            margin-left: 10px;
+            color: gray;
+        }
+        p{
+            color: gray;
+            margin:0;
+        }
+        img{
+            /*float: left;*/
+            width: 64px;
+        }
+        a{
+            text-decoration: none;
+            color: gray;
+        }
+        h2:hover,a:hover{
+            color: crimson;
+            cursor: pointer;
+        }
+        .header a{
+            color: black;
+        }
+        .header td:nth-child(1){
+            width: 80px;
+            /*padding-left: 20px;*/
+        }
+        table{
+            width: 100%;
+        }
+        th{
+            text-align: left;
+        }
+        .permissions td{
+            vertical-align: top;
+        }
+        .permissions,.attributes, .manage{
+            margin-top: 10px;
+            /*margin-bottom: 10px;*/
+        }
+        .attributes>span{
+            color: gray;
+        }
+        .none{
+            color: silver;
+        }
+    </style>
+
+
+    <template>
+        <table class='header'>
+            <tr>
+                <td>
+                    <img src='[[icon(data)]]'/>
+                </td>
+                <td>
+                    <h2 on-tap='openWebStore'>[[data.shortName]]<i>[[data.version]]</i></h2>
+                    <p>[[data.description]]</p>
+                    <a hidden$='[[webstoreHomepage(data)]]' href="[[data.homepageUrl]]" target='_blank'>[[data.homepageUrl]]</a>
+                    <!-- <span>[[data.id]]</span> -->
+                </td>
+            </tr>
+        </table>
+
+        <table class='permissions'>
+            <tr>
+                <th>Local Permissions</th>
+                <th>Web Permissions</th>
+            </tr>
+            <tr>
+                <td>
+                    <template is="dom-repeat" items="{{data.permissions}}">
+                        <li><a href='https://developer.chrome.com/extensions/[[item]]' target='_blank'>[[item]]</a></li>
+                    </template>    
+                    <span class='none' hidden$='[[hasLocalPermissions(data)]]'>-none-</span>    
+                </td>
+                <td>
+                    <template is="dom-repeat" items="{{data.hostPermissions}}">
+                        <li>[[item]]</li>
+                    </template>  
+                    <span class='none' hidden$='[[hasHostPermissions(data)]]'>-none-</span>    
+                </td>
+            </tr>
+        </table>
+
+        <div class='attributes' hidden='true'>
+            <span>[[data.type]]</span>
+            <span>| [[data.installType]] install</span>
+            <span hidden$='[[!data.launchType]]'> | [[data.launchType]]</span>
+            <span hidden$='[[!offline(data)]]'> | [[offline(data)]]</span>
+            <span hidden$='[[!data.optionsUrl]]'><a href="[[data.optionsUrl]]"> | OPTIONS</a></span>
+        </div>
+
+        <div class='manage'>
+            <span>[[enabled(data)]]</span>
+            <span>remove</span>
+        </div>
+<!-- 
+                    <li>[[enabled(data)]]</li>
+                    <li>[[data.type]]</li>
+                    <li>[[data.installType]] install</li>
+                    <li>[[data.launchType]]</li>
+                    <li>[[offline(data)]]</li>
+ -->
+    </template>
+
+</dom-module>
+
+
+
+
+
+<script>
+    Polymer({
+        is: "one-extension",
+        properties: {
+            data: {
+                type: Object,
+                observer: 'dataChange'
+            }
+        },
+        dataChange: function () {
+            // console.log('change',this.data.permissions);
+            // if(!this.data.permissions.length)
+                // this.data.permissions.push('none');
+            // console.log('change');
+            // this.set('BAR', this.setBar());
+        },
+        offline: function(item){
+            return item.offlineEnabled ? 'offline' : '';
+        },
+        enabled: function(item){
+            return item.enabled ? 'enabled' : 'disabled';
+        },
+        icon: function(item){
+            // console.log('icons',item.icons);
+            return item.icons.reverse()[0].url;
+        },
+        webstoreHomepage: function(item){
+            return (item.homepageUrl.indexOf('/webstore/')!==-1)
+        },
+        hasLaunchType: function(item){
+            // console.log('l-t',item.launchType,item.launchType === undefined ? false : true);
+            return (item.launchType === undefined ? false : true);
+        },
+        hasLocalPermissions: function(item){
+            return (item.permissions.length === 0 ? false : true);
+        },
+        hasHostPermissions: function(item){
+            return (item.hostPermissions.length === 0 ? false : true);
+        },
+        openWebStore: function(){
+            window.open("https://chrome.google.com/webstore/detail/"+this.data.id);
+        }
+
+
+
+    });
+</script>
+

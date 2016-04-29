@@ -1,0 +1,206 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8">
+    <title>Permissions</title>
+
+    </head>
+
+<body><div hidden="" by-vulcanize=""><!--
+@license
+Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+--><!--
+@license
+Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+--><!--
+@license
+Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<dom-module id="one-extension" assetpath="components/">
+    <style>
+        :host{
+            display: block;
+        }
+        h1,h2,h3{
+            font-weight: 400;
+            margin:0;
+            padding:0;
+        }
+        i{
+            display: inline-block;
+            margin-left: 10px;
+            color: gray;
+        }
+        p{
+            color: gray;
+            margin:0;
+        }
+        img{
+            /*float: left;*/
+            width: 64px;
+        }
+        a{
+            text-decoration: none;
+            color: gray;
+        }
+        h2:hover,a:hover{
+            color: crimson;
+            cursor: pointer;
+        }
+        .header a{
+            color: black;
+        }
+        .header td:nth-child(1){
+            width: 80px;
+            /*padding-left: 20px;*/
+        }
+        table{
+            width: 100%;
+        }
+        th{
+            text-align: left;
+        }
+        .permissions td{
+            vertical-align: top;
+        }
+        .permissions,.attributes, .manage{
+            margin-top: 10px;
+            /*margin-bottom: 10px;*/
+        }
+        .attributes>span{
+            color: gray;
+        }
+        .none{
+            color: silver;
+        }
+    </style>
+
+
+    <template>
+        <table class="header">
+            <tbody><tr>
+                <td>
+                    <img src="[[icon(data)]]">
+                </td>
+                <td>
+                    <h2 on-tap="openWebStore">[[data.shortName]]<i>[[data.version]]</i></h2>
+                    <p>[[data.description]]</p>
+                    <a hidden$="[[webstoreHomepage(data)]]" href="[[data.homepageUrl]]" target="_blank">[[data.homepageUrl]]</a>
+                    <!-- <span>[[data.id]]</span> -->
+                </td>
+            </tr>
+        </tbody></table>
+
+        <table class="permissions">
+            <tbody><tr>
+                <th>Local Permissions</th>
+                <th>Web Permissions</th>
+            </tr>
+            <tr>
+                <td>
+                    <template is="dom-repeat" items="{{data.permissions}}">
+                        <li><a href="https://developer.chrome.com/extensions/[[item]]" target="_blank">[[item]]</a></li>
+                    </template>    
+                    <span class="none" hidden$="[[hasLocalPermissions(data)]]">-none-</span>    
+                </td>
+                <td>
+                    <template is="dom-repeat" items="{{data.hostPermissions}}">
+                        <li>[[item]]</li>
+                    </template>  
+                    <span class="none" hidden$="[[hasHostPermissions(data)]]">-none-</span>    
+                </td>
+            </tr>
+        </tbody></table>
+
+        <div class="attributes" hidden="true">
+            <span>[[data.type]]</span>
+            <span>| [[data.installType]] install</span>
+            <span hidden$="[[!data.launchType]]"> | [[data.launchType]]</span>
+            <span hidden$="[[!offline(data)]]"> | [[offline(data)]]</span>
+            <span hidden$="[[!data.optionsUrl]]"><a href="[[data.optionsUrl]]"> | OPTIONS</a></span>
+        </div>
+
+        <div class="manage">
+            <span>[[enabled(data)]]</span>
+            <span>remove</span>
+        </div>
+<!-- 
+                    <li>[[enabled(data)]]</li>
+                    <li>[[data.type]]</li>
+                    <li>[[data.installType]] install</li>
+                    <li>[[data.launchType]]</li>
+                    <li>[[offline(data)]]</li>
+ -->
+    </template>
+
+</dom-module>
+
+
+
+
+
+<link href="https://fonts.googleapis.com/css?family=Josefin+Sans:300,400" rel="stylesheet" type="text/css">
+
+<dom-module id="app-root" assetpath="components/">
+    <style>
+        :host{
+            display: block;
+        }
+        *{
+            font-family: "Josefin Sans";
+            font-size: 20px;
+            font-weight: 300;
+        }
+        one-extension{
+            margin-top: 70px;
+        }
+        h1{
+            font-size: 40px;
+            font-weight: 400;
+        }
+    </style>
+
+
+    <template>
+        <h1>Permissions</h1>
+        <template is="dom-repeat" items="{{extensions}}">
+            <one-extension data="{{item}}"></one-extension>
+        </template>
+    </template>
+</dom-module>
+
+
+
+
+
+</div>
+	<style>
+		app-root{
+			width: 15cm;
+			margin-left: auto;
+			margin-right: auto;
+		}
+	</style>
+	<!-- <center> -->
+		<app-root></app-root>
+	<!-- </center> -->
+
+
+
+
+
+<script src="index.js"></script></body></html><!--vulcanize --inline-scripts --inline-css index.html | crisper --html build/index.html --js build/index.js
+
+-->

@@ -1,0 +1,57 @@
+<!-- <script src="../../lib/API.js"></script> -->
+
+<link rel="import" href="one-extension.html">
+
+<link href='https://fonts.googleapis.com/css?family=Josefin+Sans:300,400' rel='stylesheet' type='text/css'>
+
+<dom-module id="app-root">
+    <style>
+        :host{
+            display: block;
+        }
+        *{
+            font-family: "Josefin Sans";
+            font-size: 20px;
+            font-weight: 300;
+        }
+        one-extension{
+            margin-top: 70px;
+        }
+        h1{
+            font-size: 40px;
+            font-weight: 400;
+        }
+    </style>
+
+
+    <template>
+        <h1>Permissions</h1>
+        <template is="dom-repeat" items="{{extensions}}">
+            <one-extension data="{{item}}"></one-extension>
+        </template>
+    </template>
+</dom-module>
+
+
+
+
+
+<script>
+    Polymer({
+        is: "app-root",
+        properties: {},
+        ready: function () {
+            chrome.management.getAll(function(list) {
+                console.log(list);
+                list.sort(this.nameSort);
+                this.set('extensions',list);
+            }.bind(this));            
+        },
+        nameSort: function(a,b){ // desc
+            if(a.shortName<b.shortName) return -1;
+            if(a.shortName>b.shortName) return 1;
+            return 0;
+        }
+
+    });
+</script>
