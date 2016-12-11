@@ -1,18 +1,23 @@
 {
     "name": "Permissions",
     "description": "see extension permissions",
+    "homepage_url": "https://github.com/max-pub/Permissions",
     "manifest_version": 2,
     "version": "0.7",
     "background": {
         "scripts": ["background.js"]
     },
+    // "app": {
+    //     "background": {
+    //         "scripts": ["chrome.js"]
+    //     }
+    // },
     "browser_action": {
         "default_icon": {
             "64": "bin/key.256.png"
         },
         "default_title": "Permissions"
     },
-    "homepage_url": "https://github.com/max-pub/Permissions",
     "offline_enabled": true,
     "permissions": ["management"],
     "icons": {
